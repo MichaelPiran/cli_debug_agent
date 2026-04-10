@@ -8,13 +8,20 @@ Piccolo agente CLI che cattura l'output di un comando fallito e lo fa analizzare
 pip install groq
 ```
 
-Serve anche una chiave Groq in `GROQ_API_KEY` oppure una funzione `get_groq_api_key()` in `utis.py`.
+Serve anche una chiave Groq in `GROQ_API_KEY`
 
 ## Uso rapido
 
 ```bash
 source cli_debug_agent/dbg.sh
 dbg python3 app.py
+```
+
+## Uso globale
+
+```bash
+echo 'source /home/piran/code/mp_git/cli_debug_agent/dbg.sh' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 Per vedere il prompt sanitizzato inviato al modello:
