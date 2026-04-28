@@ -1,3 +1,4 @@
 .git/
 __pycache__/
-cli_debug_agent/
+.cli_debug_agent/
+bin/

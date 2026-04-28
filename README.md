@@ -1,20 +1,26 @@
 # CLI Debug Agent
 
-Piccolo agente CLI che cattura l'output di un comando fallito e lo fa analizzare da Groq.
+Piccolo agente CLI scritto in Go che cattura l'output di un comando fallito e lo fa analizzare da Groq.
 
 ## Requisiti
 
+- Go 1.22+
+- una chiave Groq in `GROQ_API_KEY`
+
+## Build
+
 ```bash
-pip install groq
+make build
 ```
 
-Serve anche una chiave Groq in `GROQ_API_KEY`
+L'eseguibile viene generato in `bin/cli-debug-agent`.
 
 ## Uso rapido
 
 ```bash
 source cli_debug_agent/dbg.sh
-dbg python3 app.py
+make build
+dbg ls /percorso/inesistente
 ```
 
 ## Uso globale
@@ -27,7 +33,7 @@ source ~/.bashrc
 Per vedere il prompt sanitizzato inviato al modello:
 
 ```bash
-dbg --print-prompt python3 app.py
+dbg --print-prompt ls /percorso/inesistente
 ```
 
 Con comandi shell composti:
@@ -36,8 +42,14 @@ Con comandi shell composti:
 dbg -- bash -lc 'kubectl get pod -n pippo | grep api'
 ```
 
+## Uso diretto del binario
+
+```bash
+bin/cli-debug-agent --command 'ls /percorso/inesistente' --workspace .
+```
+
 ## Note
 
 - Di default al modello viene inviato solo un errore sanitizzato.
-- Il modello predefinito e' economico e veloce: `llama-3.1-8b-instant`.
+- Il modello predefinito e' `llama-3.3-70b-versatile`.
 - Per dare accesso anche alla workspace: `dbg --allow-workspace-context ...`

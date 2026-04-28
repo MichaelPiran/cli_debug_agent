@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 dbg() {
-  local dbg_dir script_path tmp_output exit_code command_string print_prompt_flag allow_workspace_flag
+  local dbg_dir binary_path tmp_output exit_code command_string print_prompt_flag allow_workspace_flag
 
   if [[ $# -eq 0 ]]; then
     echo "Usage: dbg <command> [args...]" >&2
@@ -36,10 +36,11 @@ dbg() {
   fi
 
   dbg_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  script_path="$dbg_dir/debug_agent.py"
+  binary_path="$dbg_dir/bin/cli-debug-agent"
 
-  if [[ ! -f "$script_path" ]]; then
-    echo "debug_agent.py non trovato in $dbg_dir" >&2
+  if [[ ! -x "$binary_path" ]]; then
+    echo "Eseguibile non trovato: $binary_path" >&2
+    echo "Compila prima il progetto con: make build" >&2
     return 1
   fi
 
@@ -56,7 +57,7 @@ dbg() {
   command_string="${command_string% }"
 
   if [[ $exit_code -ne 0 ]]; then
-    python3 "$script_path" \
+    "$binary_path" \
       --from-file "$tmp_output" \
       --captured-command "$command_string" \
       --captured-exit-code "$exit_code" \
@@ -72,6 +73,8 @@ dbg() {
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   echo "Source questo file nella shell corrente:" >&2
   echo "  source cli_debug_agent/dbg.sh" >&2
+  echo "Compila prima il progetto con:" >&2
+  echo "  make build" >&2
   echo "Poi usa:" >&2
   echo "  dbg python3 app.py" >&2
   echo "  dbg --print-prompt python3 app.py" >&2
